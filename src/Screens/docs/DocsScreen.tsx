@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, FlatList } from "react-native";
 import ArrowDown from "../../assets/ArrowDown";
 import DocumentSection from "../../components/DocumentSection";
 import HistorySection from "../../components/HistorySection";
@@ -40,13 +40,14 @@ const DocsScreen: React.FC<Props> = () => {
   ]), []);
 
   const [selectedId, setSelectedId] = useState();
+  const [docs, setDocs] = useState([])
   // @ts-ignore
   const { token } = useAuth();
 
 useEffect(() => {
   console.log(token, 'token');
   fetchUsers()
-})
+},[])
 
   const fetchUsers = async () => {
     try {
@@ -55,7 +56,8 @@ useEffect(() => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response);
+      console.log(response.data.data, 'resp');
+      setDocs(response.data.data)
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -86,10 +88,15 @@ useEffect(() => {
               <ArrowDown />
             </View>
             <View style={{ marginTop: 8 }}>
-              <DocumentSection docNumber="KO34342" dataCreate="31-12-2024" docName="Bank statement"
-                               companyName="BorcelleCompany" />
-              <DocumentSection docNumber="KO34222" dataCreate="17-12-2024" docName="Final bill"
-                               companyName="BorcelleCompany" />
+              <FlatList
+                data={docs}
+                renderItem={({ item }) => (
+                  // @ts-ignore
+                  <DocumentSection docNumber={item.number} dataCreate={item.created_at} docName={item.name} id={item.id}/>
+                )}
+                // @ts-ignore
+                keyExtractor={(item) => item?.id.toString()}
+              />
             </View>
           </> :
           <HistorySection docNumber="KO34342" requestDate="31-12-2024" docName="Bank statement" user="Kathryn Murphy"

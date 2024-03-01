@@ -1,6 +1,8 @@
-import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Share, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text, TouchableOpacity, Share, Alert, Linking } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import axios from "axios";
+import { useAuth } from "../../store/AuthContext";
 
 interface Props {
   navigation: any;
@@ -10,12 +12,34 @@ const DocDetail: React.FC<Props> = () => {
   const route = useRoute();
   // @ts-ignore
   const { id } = route.params;
+  console.log(id);
+  // @ts-ignore
+  const { token } = useAuth();
 
-  const onShare = async () => {
+  const [doc, setDoc] = useState()
+
+  const getDoc = async () => {
+    try {
+      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response.data.data, 'resp');
+      setDoc(response.data.data)
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
+  useEffect(() => {
+    getDoc()
+  },[])
+
+  const onShare = async (url:any) => {
     try {
       const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React',
+        message: url,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -31,6 +55,10 @@ const DocDetail: React.FC<Props> = () => {
     }
   };
 
+  const handleDownload = (url:any) => {
+    Linking.openURL(url);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.containerBlock}>
@@ -38,11 +66,11 @@ const DocDetail: React.FC<Props> = () => {
           <View style={styles.subBlock}>
             <View style={{ marginRight: 21 }}>
               <Text style={styles.label}>Doc number</Text>
-              <Text style={styles.content}>MN-9873-C9</Text>
+              <Text style={styles.content}>{doc?.number}</Text>
             </View>
             <View>
-              <Text style={styles.label}>Doc number</Text>
-              <Text style={styles.content}>KO34342</Text>
+              <Text style={styles.label}>Date</Text>
+              <Text style={styles.content}>{doc?.created_at}</Text>
             </View>
           </View>
         </View>
@@ -50,7 +78,7 @@ const DocDetail: React.FC<Props> = () => {
           <View style={styles.subBlock}>
             <View style={{ marginRight: 24 }}>
               <Text style={styles.label}>Document name</Text>
-              <Text style={styles.content}>Bank statement</Text>
+              <Text style={styles.content}>{doc?.name}</Text>
             </View>
           </View>
         </View>
@@ -64,7 +92,7 @@ const DocDetail: React.FC<Props> = () => {
             </View>
             <View>
               <Text style={styles.label}>Expire</Text>
-              <Text style={styles.content}>13-02-2025</Text>
+              <Text style={styles.content}>{doc?.expire_at}</Text>
             </View>
           </View>
         </View>
@@ -102,10 +130,10 @@ const DocDetail: React.FC<Props> = () => {
         </View>
       </View>
       <View style={styles.btnBlock}>
-        <TouchableOpacity style={styles.btnReg} onPress={onShare}>
+        <TouchableOpacity style={styles.btnReg} onPress={() => onShare(doc?.file_url)}>
           <Text style={styles.btnText}>Share</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.btn, styles.btnSub]}>
+        <TouchableOpacity style={[styles.btn, styles.btnSub]} onPress={() => handleDownload(doc?.file_url)}>
           <Text style={styles.btnGreenText}>Download</Text>
         </TouchableOpacity>
       </View>

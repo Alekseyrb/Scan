@@ -136,6 +136,7 @@ const AppNavigator = () => {
       <Stack.Navigator>
         <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SingIn" component={SingIn} options={{ headerShown: false }} />
+        <Stack.Screen name="Scan" component={ScanScreen} options={{ headerShown: false }} />
         <Stack.Screen name="VerifyEmail" component={VerifyEmail} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Registration} options={{ headerShown: false }} />
         <Stack.Screen name="MainTabs" component={MainTabNavigator} options={{ headerShown: false }} />

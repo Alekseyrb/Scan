@@ -1,3 +1,4 @@
+import 'react-native-reanimated'
 import React from 'react';
 import AppNavigator from './src/Navigation/Navigator';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';

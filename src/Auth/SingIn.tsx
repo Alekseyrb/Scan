@@ -18,7 +18,6 @@ const SingIn: React.FC<Props> = ({ navigation }) => {
     navigation.goBack();
   };
 
-
   const login = async () => {
     try {
       axios.post('https://dashboard-s2v.vrpro.com.ua/api/login', {

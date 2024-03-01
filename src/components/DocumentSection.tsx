@@ -8,13 +8,14 @@ interface Props {
   docNumber: string;
   dataCreate: string;
   docName: string;
-  companyName: string;
+  // companyName: string;
+  id: any;
 }
 
-const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, companyName}) => {
+const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, id}) => {
   const navigator = useNavigation();
 
-  const goToDoc = (id:string) => {
+  const goToDoc = (id:any) => {
     // @ts-ignore
     return navigator.navigate('DocDetail', { id });
   }
@@ -32,7 +33,7 @@ const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, compa
             <Text style={styles.content}>{dataCreate}</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.btn} onPress={() => goToDoc('1')}>
+        <TouchableOpacity style={styles.btn} onPress={() => goToDoc(id)}>
           <ArrowRight color="#fff"/>
         </TouchableOpacity>
       </View>
@@ -42,10 +43,10 @@ const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, compa
             <Text style={styles.label}>Document name</Text>
             <Text style={styles.content}>{docName}</Text>
           </View>
-          <View>
-            <Text style={styles.label}>Company creator</Text>
-            <Text style={styles.content}>{companyName}</Text>
-          </View>
+          {/*<View>*/}
+          {/*  <Text style={styles.label}>Company creator</Text>*/}
+          {/*  <Text style={styles.content}>{companyName}</Text>*/}
+          {/*</View>*/}
         </View>
       </View>
     </View>
