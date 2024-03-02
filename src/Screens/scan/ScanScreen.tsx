@@ -4,14 +4,16 @@ import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import WebView from "react-native-webview";
 import { useAuth } from "../../store/AuthContext";
+import { useNavigation } from "@react-navigation/native";
 
-export default function ScanScreen() {
+export default function ScanScreen({ navigation }) {
   //@ts-ignore
   const { token } = useAuth();
   const { hasPermission, requestPermission } = useCameraPermission();
   const [isLoading, setIsLoading] = useState(true);
   const device = useCameraDevice("back");
   const [scanCode,setScanCode] = useState();
+  const [docObj,setDocObj] = useState();
   const [openDoc, setOpenDoc] = useState(null);
 
   if (device == null) return <Text>sorry</Text>;
@@ -49,18 +51,80 @@ export default function ScanScreen() {
       
     }
   };
-  const getDocument = async () => {
+  const getDocAcsses = async () => {
     try {
-      axios.post(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/download`,{
+      console.log('getDocAcsses');
+      
+      axios.post(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests`,{
+        number: scanCode
+      },{
         headers: {
           Authorization: `Bearer ${token}`
         }})
         .then(({ data }) => {
-            setOpenDoc(data)
-            console.log("Success:", data);
-            
+          Alert.alert("Permit request has been sent.", `Wait until the author of the document gives you permission and try scanning again.`, [
+            { text: "OK", onPress: () => {}}
+          ])
           }
         )
+    } catch (e) {
+      console.log(e,'#ferg4g');
+      
+    }
+  };
+  const getDocByNumber = async (num: any) => {
+    try {
+      axios.post(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/number/${num}`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }})
+        .then(({ data }) => {
+          setDocObj(data)
+          }
+        )
+    } catch (e) {
+      console.log(e,'#ferg4g');
+      
+    }
+  };
+  const getDocument = async () => {
+    console.log(scanCode);
+    
+    try {
+      axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/access`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }})
+        .then(({ data }) => {
+          console.log(scanCode);
+          // console.log();
+          
+            if (data.access) {
+              console.log('done');
+              //@ts-ignore
+              navigation.navigate('DocDetailScan',{
+                scanCode: scanCode,
+                metadata_only: data.metadata_only
+              });
+
+            } else {
+              console.log(data.data);
+              
+              getDocAcsses()
+              
+            }
+
+
+          }
+        ).catch((e)=>{
+          // setScanCode(' ');
+          console.log(44444,e,e.message);
+          Alert.alert("Error", `There is no such user.`, [
+            { text: "OK", onPress: () => {}}
+          ])
+          console.log(e);
+          
+        })
     } catch (e) {
       Alert.alert("You do not have access to this document ", ``, [
         {

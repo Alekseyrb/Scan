@@ -21,6 +21,7 @@ import Bell from "../assets/Bell";
 import Doc from "../assets/Doc";
 import Scan from "../assets/Scan";
 import DocDetail from "../Screens/docs/DocDetail";
+import DocDetailScan from "../Screens/docs/DocDetailScan";
 import SettingScreen from "../Screens/profile/SettingScreen";
 
 const Stack = createNativeStackNavigator();
@@ -175,6 +176,19 @@ const AppNavigator = () => {
         <Stack.Screen
           name="DocDetail"
           component={DocDetail}
+          options={({ navigation }) => ({
+            headerTitle: "My document",
+            headerLeft: () => <CustomHeaderLeft navigation={navigation} />,
+            headerStyle: {
+              backgroundColor: "#000000"
+            },
+            headerTintColor: "#FFFFFF",
+            headerShadowVisible: false
+          })}
+        />
+        <Stack.Screen
+          name="DocDetailScan"
+          component={DocDetailScan}
           options={({ navigation }) => ({
             headerTitle: "My document",
             headerLeft: () => <CustomHeaderLeft navigation={navigation} />,

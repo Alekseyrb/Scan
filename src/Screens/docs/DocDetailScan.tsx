@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Share, Alert, Linking } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { Link, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { useAuth } from "../../store/AuthContext";
+import WebView from "react-native-webview";
 
 interface Props {
   navigation: any;
 }
 
-const DocDetail: React.FC<Props> = () => {
+const DocDetailScan: React.FC<Props> = () => {
   const route = useRoute();
   // @ts-ignore
-  const { id } = route.params;
-  console.log(id);
+  const { scanCode, metadata_only } = route.params;
+  // console.log(333333,scanCode, metadata_only);
   // @ts-ignore
   const { token } = useAuth();
 
   const [doc, setDoc] = useState()
+  const [link, setLink] = useState<boolean>(false)
 
   const getDoc = async () => {
     try {
-      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${id}`, {
+      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/number/${scanCode}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -32,34 +34,42 @@ const DocDetail: React.FC<Props> = () => {
     }
   };
 
-  useEffect(() => {
-    getDoc()
-  },[])
-
-  const onShare = async (url:any) => {
+  const getView = async () => {
+    setLink(true)
     try {
-      const result = await Share.share({
-        message: url,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
+      // console.error(111111);
+      
+      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/download`, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error: any) {
-      Alert.alert(error.message);
+      });
+      // console.log(response.data,'response');
+      
+      Linking.openURL(doc?.file_url);
+      // console.log(response.data.data, 'resp');
+      
+    } catch (error) {
+      console.error('Error fetching users:', error);
     }
   };
+
+  useEffect(() => {
+    getDoc()
+    if (!metadata_only){
+    
+    }
+    return ()=>{
+      setLink(false)
+    }
+  },[])
+
 
   const handleDownload = (url:any) => {
     Linking.openURL(url);
   };
 
-  return (
+  return !link ? (
     <View style={styles.container}>
       <View style={styles.containerBlock}>
         <View style={styles.block}>
@@ -83,63 +93,15 @@ const DocDetail: React.FC<Props> = () => {
           </View>
         </View>
       </View>
-      {/*<View style={styles.subContainerBlock}>*/}
-      {/*  <View style={styles.block}>*/}
-      {/*    <View style={styles.subBlock}>*/}
-      {/*      <View style={{ marginRight: 21 }}>*/}
-      {/*        <Text style={styles.label}>Document reg</Text>*/}
-      {/*        <Text style={styles.content}>KO34342</Text>*/}
-      {/*      </View>*/}
-      {/*      <View>*/}
-      {/*        <Text style={styles.label}>Expire</Text>*/}
-      {/*        <Text style={styles.content}>{doc?.expire_at}</Text>*/}
-      {/*      </View>*/}
-      {/*    </View>*/}
-      {/*  </View>*/}
-      {/*  <View style={{ marginTop: 4 }}>*/}
-      {/*    <View style={styles.subBlock}>*/}
-      {/*      <View style={{ marginRight: 24 }}>*/}
-      {/*        <Text style={styles.label}>Name on document</Text>*/}
-      {/*        <Text style={styles.content}>Silva Moralez</Text>*/}
-      {/*      </View>*/}
-      {/*    </View>*/}
-      {/*  </View>*/}
-      {/*  <View style={{ marginTop: 4 }}>*/}
-      {/*    <View style={styles.subBlock}>*/}
-      {/*      <View style={{ marginRight: 24 }}>*/}
-      {/*        <Text style={styles.label}>Account</Text>*/}
-      {/*        <Text style={styles.content}>3533 3656 3636 1256</Text>*/}
-      {/*      </View>*/}
-      {/*    </View>*/}
-      {/*  </View>*/}
-      {/*  <View style={{ ...styles.block, marginTop: 8 }}>*/}
-      {/*    <View style={styles.subBlock}>*/}
-      {/*      <View style={{ marginRight: 21 }}>*/}
-      {/*        <Text style={styles.label}>Bank</Text>*/}
-      {/*        <Text style={styles.content}>Barclays</Text>*/}
-      {/*      </View>*/}
-      {/*      <View style={{ marginRight: 21 }}>*/}
-      {/*        <Text style={styles.label}>Amount</Text>*/}
-      {/*        <Text style={styles.content}>40 000</Text>*/}
-      {/*      </View>*/}
-      {/*      <View>*/}
-      {/*        <Text style={styles.label}>Currency</Text>*/}
-      {/*        <Text style={styles.content}>GBP</Text>*/}
-      {/*      </View>*/}
-      {/*    </View>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
       <View style={styles.btnBlock}>
-        <TouchableOpacity style={styles.btnReg} onPress={() => onShare(doc?.file_url)}>
-          <Text style={styles.btnText}>Share</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.btn, styles.btnSub]} onPress={() => handleDownload(doc?.file_url)}>
-          <Text style={styles.btnGreenText}>Download</Text>
-        </TouchableOpacity>
+      {!metadata_only && <TouchableOpacity style={styles.btn} onPress={getView}>
+              <Text style={styles.btnText}>View</Text>
+      </TouchableOpacity>}
       </View>
     </View>
-  
-  );
+  ) : (
+    <WebView source={{ uri: doc?.file_url }} style={{ flex: 1 }} />
+    );
 };
 
 const styles = StyleSheet.create({
@@ -221,16 +183,18 @@ const styles = StyleSheet.create({
     marginTop: 16
   },
   btn: {
-    width: "100%",
+    backgroundColor: "#7920C8",
+    width: '100%',
     height: 56,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     borderRadius: 14,
-    borderColor: "#09E510"
+    borderColor: "#7920C8",
+    marginTop: 24,
   }
 });
 
 
-export default DocDetail;
+export default DocDetailScan;
