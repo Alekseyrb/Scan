@@ -9,6 +9,12 @@ interface Props {
 }
 
 const MyData: React.FC<Props> = ({ navigation }) => {
+  const getMedata = {
+    name: '',
+    // email: '',
+    phone: '',
+  };
+  const [meData,setMedata] = useState(getMedata)
   // @ts-ignore
   const { token } = useAuth();
   const getMeData = async () => {
@@ -18,7 +24,8 @@ const MyData: React.FC<Props> = ({ navigation }) => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response.data, 'resp history');
+      console.log(response.data.data, 'resp me');
+      setMedata(response.data.data)
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -28,19 +35,20 @@ const MyData: React.FC<Props> = ({ navigation }) => {
     getMeData();
   }, []);
 
-  const getMedata = {
-    name: '',
-    // email: '',
-    phone: '',
-  };
-  const [meData,setMedata] = useState(getMedata)
-
   const handleMeData = (newData: any) => {
     setMedata(newData)
   }
 
-  const updateDate = () => {
-
+  const updateDate = async () =>  {
+    await axios.put(`https://dashboard-s2v.vrpro.com.ua/api/app/users/me`,
+      {
+        name: meData.name,
+        phone: meData.phone,
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+    });
   }
 
   useEffect(()=>{
