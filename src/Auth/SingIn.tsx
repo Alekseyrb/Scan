@@ -21,8 +21,8 @@ const SingIn: React.FC<Props> = ({ navigation }) => {
   const login = async () => {
     try {
       axios.post('https://dashboard-s2v.vrpro.com.ua/api/login', {
-        email: email,
-        password: password,
+        email: 'kotejov268@aersm.com',
+        password: 'aaaaaaaaa',
       })
         .then(({ data }) => {
             console.log("Success:", data);

@@ -5,7 +5,7 @@ const AuthContext = createContext();
 
 // Создаем компонент-поставщик, который будет содержать состояние и логику для аутентификации
 const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState<any>(null);
 
   // Функция для входа в систему
   const setLoginToken = (tokenValue) => {

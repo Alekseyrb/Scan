@@ -44,6 +44,7 @@ const DocsScreen: React.FC<Props> = () => {
   // @ts-ignore
   const { token } = useAuth();
 
+  const handleClosePress = () => setShow(false);
 useEffect(() => {
   console.log(token, 'token');
   fetchUsers()
@@ -65,7 +66,7 @@ useEffect(() => {
 
   return (
     <>
-      <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleClosePress} activeOpacity={1}>
         <View style={styles.switchBlock}>
           <TouchableOpacity style={[styles.switchBtn, show ? null : { borderColor: "#2A2840" }]}
                             onPress={() => showDocs(true)}>
@@ -102,15 +103,18 @@ useEffect(() => {
           <HistorySection docNumber="KO34342" requestDate="31-12-2024" docName="Bank statement" user="Kathryn Murphy"
                           onPressAllow={() => setBottomSheetVisible(!bottomSheetVisible)} />
         }
-      </View>
+      </TouchableOpacity>
       {bottomSheetVisible && (
         <BottomSheet
           ref={bottomSheetRef}
-          snapPoints={['55%', '55%']}
+          snapPoints={['60%', '60%']}
           onChange={handleSheetChanges}
           handleComponent={() => (
             <View style={styles.customHandle}/>
           )}
+          containerStyle={{
+            backgroundColor: 'rgba(21, 20, 34, 0.8)'
+          }}
         >
           <BottomSheetView style={styles.contentContainer}>
             <Text style={styles.bottomSheetLabel}>Access for: </Text>
@@ -145,12 +149,12 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingTop: 20,
     color: '#A64DF4',
-    // backgroundColor:  'red'
   },
   radioLabel: {
     color: '#FFFFFF',
   },
   customHandle: {
+
     backgroundColor: '#151422',
     paddingTop: 10,
     paddingBottom: 10,
@@ -158,6 +162,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 14,
   },
   contentContainer: {
+    paddingBottom: 24,
+    zIndex: 100,
     flex: 1,
     backgroundColor: '#151422',
     paddingHorizontal: 16,
