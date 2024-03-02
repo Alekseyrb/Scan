@@ -83,52 +83,52 @@ const DocDetail: React.FC<Props> = () => {
           </View>
         </View>
       </View>
-      <View style={styles.subContainerBlock}>
-        <View style={styles.block}>
-          <View style={styles.subBlock}>
-            <View style={{ marginRight: 21 }}>
-              <Text style={styles.label}>Document reg</Text>
-              <Text style={styles.content}>KO34342</Text>
-            </View>
-            <View>
-              <Text style={styles.label}>Expire</Text>
-              <Text style={styles.content}>{doc?.expire_at}</Text>
-            </View>
-          </View>
-        </View>
-        <View style={{ marginTop: 4 }}>
-          <View style={styles.subBlock}>
-            <View style={{ marginRight: 24 }}>
-              <Text style={styles.label}>Name on document</Text>
-              <Text style={styles.content}>Silva Moralez</Text>
-            </View>
-          </View>
-        </View>
-        <View style={{ marginTop: 4 }}>
-          <View style={styles.subBlock}>
-            <View style={{ marginRight: 24 }}>
-              <Text style={styles.label}>Account</Text>
-              <Text style={styles.content}>3533 3656 3636 1256</Text>
-            </View>
-          </View>
-        </View>
-        <View style={{ ...styles.block, marginTop: 8 }}>
-          <View style={styles.subBlock}>
-            <View style={{ marginRight: 21 }}>
-              <Text style={styles.label}>Bank</Text>
-              <Text style={styles.content}>Barclays</Text>
-            </View>
-            <View style={{ marginRight: 21 }}>
-              <Text style={styles.label}>Amount</Text>
-              <Text style={styles.content}>40 000</Text>
-            </View>
-            <View>
-              <Text style={styles.label}>Currency</Text>
-              <Text style={styles.content}>GBP</Text>
-            </View>
-          </View>
-        </View>
-      </View>
+      {/*<View style={styles.subContainerBlock}>*/}
+      {/*  <View style={styles.block}>*/}
+      {/*    <View style={styles.subBlock}>*/}
+      {/*      <View style={{ marginRight: 21 }}>*/}
+      {/*        <Text style={styles.label}>Document reg</Text>*/}
+      {/*        <Text style={styles.content}>KO34342</Text>*/}
+      {/*      </View>*/}
+      {/*      <View>*/}
+      {/*        <Text style={styles.label}>Expire</Text>*/}
+      {/*        <Text style={styles.content}>{doc?.expire_at}</Text>*/}
+      {/*      </View>*/}
+      {/*    </View>*/}
+      {/*  </View>*/}
+      {/*  <View style={{ marginTop: 4 }}>*/}
+      {/*    <View style={styles.subBlock}>*/}
+      {/*      <View style={{ marginRight: 24 }}>*/}
+      {/*        <Text style={styles.label}>Name on document</Text>*/}
+      {/*        <Text style={styles.content}>Silva Moralez</Text>*/}
+      {/*      </View>*/}
+      {/*    </View>*/}
+      {/*  </View>*/}
+      {/*  <View style={{ marginTop: 4 }}>*/}
+      {/*    <View style={styles.subBlock}>*/}
+      {/*      <View style={{ marginRight: 24 }}>*/}
+      {/*        <Text style={styles.label}>Account</Text>*/}
+      {/*        <Text style={styles.content}>3533 3656 3636 1256</Text>*/}
+      {/*      </View>*/}
+      {/*    </View>*/}
+      {/*  </View>*/}
+      {/*  <View style={{ ...styles.block, marginTop: 8 }}>*/}
+      {/*    <View style={styles.subBlock}>*/}
+      {/*      <View style={{ marginRight: 21 }}>*/}
+      {/*        <Text style={styles.label}>Bank</Text>*/}
+      {/*        <Text style={styles.content}>Barclays</Text>*/}
+      {/*      </View>*/}
+      {/*      <View style={{ marginRight: 21 }}>*/}
+      {/*        <Text style={styles.label}>Amount</Text>*/}
+      {/*        <Text style={styles.content}>40 000</Text>*/}
+      {/*      </View>*/}
+      {/*      <View>*/}
+      {/*        <Text style={styles.label}>Currency</Text>*/}
+      {/*        <Text style={styles.content}>GBP</Text>*/}
+      {/*      </View>*/}
+      {/*    </View>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
       <View style={styles.btnBlock}>
         <TouchableOpacity style={styles.btnReg} onPress={() => onShare(doc?.file_url)}>
           <Text style={styles.btnText}>Share</Text>
