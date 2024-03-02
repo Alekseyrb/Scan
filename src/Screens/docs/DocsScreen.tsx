@@ -28,12 +28,12 @@ const DocsScreen: React.FC<Props> = () => {
 
   const radioButtons = useMemo(() => ([
     {
-      id: '1',
+      id: 0,
       label: 'Metadata only',
       value: 'option1'
     },
     {
-      id: '2',
+      id: 1,
       label: 'Metadata and document',
       value: 'option2'
     }
@@ -45,6 +45,7 @@ const DocsScreen: React.FC<Props> = () => {
 
   const [history, setHistory] = useState([])
   const [historyCount, setHistoryCount] = useState();
+  const [idForUpt, setIdForUpt] = useState();
   // @ts-ignore
   const { token } = useAuth();
 
@@ -84,6 +85,23 @@ const getHistory = async () => {
     console.error('Error fetching users:', error);
   }
 };
+
+  const updateAccess = async (id:any, selectedId:any) =>  {
+    await axios.put(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests/${id}`,
+      {
+        access: 1,
+        metadata_only:selectedId
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
+  }
+
+  const openBottomSheet = (id:any, ) => {
+    setBottomSheetVisible(!bottomSheetVisible)
+    setIdForUpt(id)
+  }
 
   return (
     <>
@@ -127,7 +145,7 @@ const getHistory = async () => {
               renderItem={({ item }) => (
                 // @ts-ignore
                 <HistorySection docNumber={item.number} requestDate={item.created_at} docName={item.name} user={item.user.name}
-                                onPressAllow={() => setBottomSheetVisible(!bottomSheetVisible)} />
+                                id={item.id} onPressAllow={() => openBottomSheet(item.id)} />
               )}
               // @ts-ignore
               keyExtractor={(item) => item?.id.toString()}
@@ -166,7 +184,7 @@ const getHistory = async () => {
               <Text style={styles.dropText}>Day</Text>
               <ArrowDown />
             </View>
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity style={styles.btn} onPress={() => updateAccess(idForUpt, selectedId)}>
               <Text style={styles.btnText}>Confirm</Text>
             </TouchableOpacity>
           </BottomSheetView>

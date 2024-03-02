@@ -2,6 +2,8 @@ import React, { useCallback, useRef, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import axios from "axios";
+import { useAuth } from "../store/AuthContext";
 
 interface Props {
   docNumber: string;
@@ -9,15 +11,29 @@ interface Props {
   docName: string;
   user: string;
   onPressAllow: any;
+  id: any
 }
 
-const HistorySection: React.FC<Props> = ({docNumber, requestDate, docName, user, onPressAllow}) => {
+const HistorySection: React.FC<Props> = ({docNumber, requestDate, docName, user, onPressAllow, id}) => {
   const navigator = useNavigation();
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
-
+  // @ts-ignore
+  const { token } = useAuth();
   const goToDoc = (id:string) => {
     // @ts-ignore
     return navigator.navigate('DocDetail', { id });
+  }
+
+  const updateAccess = async () =>  {
+    await axios.put(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests/${id}`,
+      {
+        access: 0,
+        metadata_only:1
+      },{
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+      });
   }
 
   return (
@@ -47,7 +63,7 @@ const HistorySection: React.FC<Props> = ({docNumber, requestDate, docName, user,
         </View>
       </View>
       <View style={styles.btnBlock}>
-        <TouchableOpacity style={styles.btnReg}>
+        <TouchableOpacity style={styles.btnReg} onPress={updateAccess}>
           <Text style={styles.btnText}>Deny</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.btn, styles.btnSub]} onPress={onPressAllow}>
