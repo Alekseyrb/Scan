@@ -21,6 +21,7 @@ const DataSection: React.FC<Props> = ({label, content, isEmail, isField, meData,
   const [isChangeField, setIsChangeField] = useState(false);
   const [change, setChange] = useState(content);
 
+  console.log(change, 'cococo');
   const editProfile = () => {
     isField ? setIsChangeField(!isChangeField) : setIsChangeField(false)
     // @ts-ignore
@@ -40,7 +41,7 @@ const DataSection: React.FC<Props> = ({label, content, isEmail, isField, meData,
             style={styles.input}
             placeholder="write new"
             placeholderTextColor="#595674"
-            value={change}
+            value={content}
             onChangeText={handleData}
           />
           :
