@@ -41,12 +41,17 @@ const DocsScreen: React.FC<Props> = () => {
 
   const [selectedId, setSelectedId] = useState();
   const [docs, setDocs] = useState([])
+  const [docCount, setDocCount] = useState();
+
+  const [history, setHistory] = useState([])
+  const [historyCount, setHistoryCount] = useState();
   // @ts-ignore
   const { token } = useAuth();
 
 useEffect(() => {
   console.log(token, 'token');
   fetchUsers()
+  getHistory()
 },[])
 
   const fetchUsers = async () => {
@@ -58,10 +63,26 @@ useEffect(() => {
       });
       console.log(response.data.data, 'resp');
       setDocs(response.data.data)
+      setDocCount(response.data.data.length)
     } catch (error) {
       console.error('Error fetching users:', error);
     }
   };
+
+const getHistory = async () => {
+  try {
+    const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    console.log(response.data.data, 'resp history');
+    setHistory(response.data.data)
+    setHistoryCount(response.data.data.length)
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
+};
 
   return (
     <>
@@ -71,13 +92,13 @@ useEffect(() => {
                             onPress={() => showDocs(true)}>
             <Text style={[styles.switchText, show ? null : { color: "#8A85CC" }]}>Documents</Text>
             <View style={[styles.square, show ? null : { backgroundColor: "#2A2840" }]}><Text
-              style={[styles.text, show ? null : { color: "#fff" }]}>2</Text></View>
+              style={[styles.text, show ? null : { color: "#fff" }]}>{docCount}</Text></View>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.switchBtn, show ? { borderColor: "#2A2840" } : null]}
                             onPress={() => showDocs(false)}>
             <Text style={[styles.switchText, show ? { color: "#8A85CC" } : null]}>History</Text>
             <View style={[styles.square, show ? { backgroundColor: "#2A2840" } : null]}><Text
-              style={[styles.text, show ? { color: "#fff" } : null]}>9</Text></View>
+              style={[styles.text, show ? { color: "#fff" } : null]}>{historyCount}</Text></View>
           </TouchableOpacity>
         </View>
         {show ?
@@ -99,8 +120,20 @@ useEffect(() => {
               />
             </View>
           </> :
-          <HistorySection docNumber="KO34342" requestDate="31-12-2024" docName="Bank statement" user="Kathryn Murphy"
-                          onPressAllow={() => setBottomSheetVisible(!bottomSheetVisible)} />
+          <View style={{ marginTop: 8 }}>
+            <FlatList
+              data={history}
+              renderItem={({ item }) => (
+                // @ts-ignore
+                <HistorySection docNumber={item.number} requestDate={item.created_at} docName={item.name} user={item.user.name}
+                                onPressAllow={() => setBottomSheetVisible(!bottomSheetVisible)} />
+              )}
+              // @ts-ignore
+              keyExtractor={(item) => item?.id.toString()}
+            />
+          </View>
+          // <HistorySection docNumber="KO34342" requestDate="31-12-2024" docName="Bank statement" user="Kathryn Murphy"
+          //                 onPressAllow={() => setBottomSheetVisible(!bottomSheetVisible)} />
         }
       </View>
       {bottomSheetVisible && (

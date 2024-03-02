@@ -37,7 +37,7 @@ const HistorySection: React.FC<Props> = ({docNumber, requestDate, docName, user,
       <View style={{marginTop: 4}}>
         <View style={styles.subBlock}>
           <View style={{marginRight: 24}}>
-            <Text style={styles.label}>Request date</Text>
+            <Text style={styles.label}>Create date</Text>
             <Text style={styles.content}>{requestDate}</Text>
           </View>
           <View>

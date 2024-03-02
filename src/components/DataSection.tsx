@@ -9,25 +9,47 @@ interface Props {
   label: string;
   content: string;
   isEmail: boolean;
+  isField: boolean;
+  name: string;
+  meData: any;
+  handleMeData: any;
 }
 
-const DataSection: React.FC<Props> = ({label, content, isEmail}) => {
+const DataSection: React.FC<Props> = ({label, content, isEmail, isField, meData, handleMeData, name}) => {
   const navigator = useNavigation();
   const [isEdit, setIsEdit] = useState(false);
+  const [isChangeField, setIsChangeField] = useState(false);
+  const [change, setChange] = useState(content);
 
   const editProfile = () => {
+    isField ? setIsChangeField(!isChangeField) : setIsChangeField(false)
     // @ts-ignore
     return isEmail ? navigator.navigate('ChangeEmail') : setIsEdit(!isEdit);
+  }
+  const handleData = (newData: any) => {
+    handleMeData({...meData,[name]: newData})
+    setChange(newData)
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}:</Text>
       <View style={styles.block}>
-        <Text style={styles.content}>{content}</Text>
+        {isChangeField ?
+          <TextInput
+            style={styles.input}
+            placeholder="write new"
+            placeholderTextColor="#595674"
+            value={change}
+            onChangeText={handleData}
+          />
+          :
+          <Text style={styles.content}>{content}</Text>
+        }
+        {isEmail ? <></> :
         <TouchableOpacity style={styles.edit} onPress={() => editProfile()}>
-          <Edit/>
-        </TouchableOpacity>
+          <Edit />
+        </TouchableOpacity> }
       </View>
     </View>
   );
@@ -69,7 +91,10 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  }
+  },
+  input: {
+    // width: '90%',
+  },
 });
 
 

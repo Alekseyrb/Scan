@@ -7,7 +7,7 @@ import VerifyEmail from "../Auth/VerifyEmail";
 import Registration from "../Auth/Registration";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "../Screens/profile/ProfileScreen";
-import { StatusBar, TouchableOpacity } from "react-native";
+import { Image, StatusBar, TouchableOpacity } from "react-native";
 import MyData from "../Screens/profile/MyData";
 import ArrowLeft from "../assets/ArrowLeft";
 import ChangeEmail from "../Screens/profile/ChangeEmail";
@@ -44,7 +44,13 @@ const MainTabNavigator = () => {
           } else if (route.name === "Scan") {
             return <Scan />;
           } else if (route.name === "History") {
-            return focused ? <Bell color="#76C0FA" /> : <Bell color="#8A85CC" />;
+            return !focused ? <Image
+              source={require('../assets/bell_icon.png')}
+              style={{ width: 23, height: 25 }}
+            /> : <Image
+              source={require('../assets/bell_icon_color.png')}
+              style={{ width: 16, height: 18 }}
+            />;
           } else if (route.name === "Docs") {
             return focused ? <Doc color="#76C0FA" /> : <Doc color="#8A85CC" />;
           }
