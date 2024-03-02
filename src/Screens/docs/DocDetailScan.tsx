@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Share, Alert, Linking } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Share, Alert, Linking, ActivityIndicator } from "react-native";
 import { Link, useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { useAuth } from "../../store/AuthContext";
@@ -18,6 +18,7 @@ const DocDetailScan: React.FC<Props> = () => {
   const { token } = useAuth();
 
   const [doc, setDoc] = useState()
+  const [pageLoading, setPageLoading] = useState(true)
   const [link, setLink] = useState<boolean>(false)
 
   const getDoc = async () => {
@@ -36,23 +37,26 @@ const DocDetailScan: React.FC<Props> = () => {
 
   const getView = async () => {
     setLink(true)
-    try {
-      // console.error(111111);
+    // try {
+    //   // console.error(111111);
       
-      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/download`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      // console.log(response.data,'response');
+    //   const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/download`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`
+    //     }
+    //   });
+    //   // console.log(response.data,'response');
       
-      Linking.openURL(doc?.file_url);
-      // console.log(response.data.data, 'resp');
+      // Linking.openURL(doc?.file_url);
+    //   // console.log(response.data.data, 'resp');
       
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
+    // } catch (error) {
+    //   console.error('Error fetching users:', error);
+    // }
   };
+  function hideSpinner() {
+    setPageLoading(false)
+  }
 
   useEffect(() => {
     getDoc()
@@ -100,7 +104,20 @@ const DocDetailScan: React.FC<Props> = () => {
       </View>
     </View>
   ) : (
-    <WebView source={{ uri: doc?.file_url }} style={{ flex: 1 }} />
+    <View style={{ flex: 1 }}>
+      <WebView
+        onLoad={() => hideSpinner()}
+        style={{ flex: 1 }}
+        source={{ uri: `http://docs.google.com/gview?embedded=true&url=${doc?.file_url}` }}
+      />
+      {pageLoading && (
+        <ActivityIndicator
+          style={{ position: "absolute", top: '50%',  }}
+          size="large"
+        />
+      )}
+    </View>
+    // <WebVie .w source={{ uri: `http://docs.google.com/gview?embedded=true&url=${doc?.file_url}` }} style={StyleSheet.absoluteFill} />
     );
 };
 

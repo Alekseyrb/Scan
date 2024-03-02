@@ -14,6 +14,7 @@ export default function ScanScreen({ navigation }) {
   const device = useCameraDevice("back");
   const [scanCode,setScanCode] = useState();
   const [docObj,setDocObj] = useState();
+  const [resetScreen,setResetScreen] = useState(false);
   const [openDoc, setOpenDoc] = useState(null);
 
   if (device == null) return <Text>sorry</Text>;
@@ -29,6 +30,8 @@ export default function ScanScreen({ navigation }) {
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes: any) => {
+      console.log(34);
+      setResetScreen(prev=>!prev)
       setScanCode(codes[0].value);
     }
   });
@@ -96,7 +99,7 @@ export default function ScanScreen({ navigation }) {
           Authorization: `Bearer ${token}`
         }})
         .then(({ data }) => {
-          console.log(scanCode);
+          console.log(444444644,data);
           // console.log();
           
             if (data.access) {
@@ -117,11 +120,15 @@ export default function ScanScreen({ navigation }) {
 
           }
         ).catch((e)=>{
-          // setScanCode(' ');
-          console.log(44444,e,e.message);
-          Alert.alert("Error", `There is no such user.`, [
-            { text: "OK", onPress: () => {}}
-          ])
+          Alert.alert("You do not have access to this document ", ``, [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "Request permission", onPress: () => getRequstPermision() }
+          ]);
+         
           console.log(e);
           
         })
@@ -140,7 +147,7 @@ export default function ScanScreen({ navigation }) {
     if (scanCode){
       getDocument()
     }
-  },[scanCode])
+  },[scanCode,resetScreen])
   return isLoading ? 
   <View style={[StyleSheet.absoluteFill,{
     backgroundColor: '#151422',

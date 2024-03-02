@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, FlatList } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, FlatList, ScrollView } from "react-native";
 import ArrowDown from "../../assets/ArrowDown";
 import DocumentSection from "../../components/DocumentSection";
 import HistorySection from "../../components/HistorySection";
@@ -7,6 +7,7 @@ import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import RadioGroup from 'react-native-radio-buttons-group';
 import { useAuth } from "../../store/AuthContext";
 import axios from "axios";
+import WebView from "react-native-webview";
 
 interface Props {
 }
@@ -63,7 +64,7 @@ useEffect(() => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response.data.data, 'resp');
+     
       setDocs(response.data.data)
       setDocCount(response.data.data.length)
     } catch (error) {
@@ -102,10 +103,10 @@ const getHistory = async () => {
     setBottomSheetVisible(!bottomSheetVisible)
     setIdForUpt(id)
   }
-
+  // return (<WebView source={{ uri: 'http://docs.google.com/gview?embedded=true&url=https://dashboard-s2v.vrpro.com.ua/documents/ul24030269.pdf' }} style={StyleSheet.absoluteFill} />)
   return (
     <>
-    <TouchableOpacity style={styles.container} onPress={handleClosePress} activeOpacity={1}>
+    <View style={styles.container} onPress={handleClosePress} activeOpacity={1}>
         <View style={styles.switchBlock}>
           <TouchableOpacity style={[styles.switchBtn, show ? null : { borderColor: "#2A2840" }]}
                             onPress={() => showDocs(true)}>
@@ -127,8 +128,14 @@ const getHistory = async () => {
               <Text style={styles.dropText}>All companies</Text>
               <ArrowDown />
             </View>
-            <View style={{ marginTop: 8 }}>
-              <FlatList
+            <View style={{ marginTop: 8, height: '70%' }}>
+              <ScrollView>
+                {docs.map(item=>(
+                   // @ts-ignore
+                  <DocumentSection docNumber={item.number} dataCreate={item.created_at} docName={item.name} id={item.id}/>
+                ))}
+              </ScrollView>
+              {/* <FlatList
                 data={docs}
                 renderItem={({ item }) => (
                   // @ts-ignore
@@ -136,25 +143,28 @@ const getHistory = async () => {
                 )}
                 // @ts-ignore
                 keyExtractor={(item) => item?.id.toString()}
-              />
+              /> */}
             </View>
           </> :
           <View style={{ marginTop: 8 }}>
-            <FlatList
+            {history.length> 0 && <FlatList
               data={history}
-              renderItem={({ item }) => (
+              renderItem={({ item }) => {
+                // console.error(item);
+                
+                // return null
+                return (
                 // @ts-ignore
-                <HistorySection docNumber={item.number} requestDate={item.created_at} docName={item.name} user={item.user.name}
-                                id={item.id} onPressAllow={() => openBottomSheet(item.id)} />
-              )}
+                <HistorySection docNumber={item?.document?.number} requestDate={item?.created_at} docName={item?.document?.name} user={item?.from_user?.name} id={item?.id} onPressAllow={() => openBottomSheet(item.id)} />
+              )}}
               // @ts-ignore
               keyExtractor={(item) => item?.id.toString()}
-            />
+            />}
           </View>
           // <HistorySection docNumber="KO34342" requestDate="31-12-2024" docName="Bank statement" user="Kathryn Murphy"
           //                 onPressAllow={() => setBottomSheetVisible(!bottomSheetVisible)} />
         }
-      </TouchableOpacity>
+      </View>
       {bottomSheetVisible && (
         <BottomSheet
           ref={bottomSheetRef}

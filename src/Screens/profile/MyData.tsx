@@ -11,7 +11,7 @@ interface Props {
 const MyData: React.FC<Props> = ({ navigation }) => {
   const getMedata = {
     name: '',
-    // email: '',
+    email: '',
     phone: '',
   };
   const [meData,setMedata] = useState(getMedata)
@@ -58,7 +58,7 @@ const MyData: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <DataSection name={'name'} label="Full name" content={meData.name} meData={meData} handleMeData={handleMeData} isEmail={false} isField={true}/>
-      <DataSection name={'email'} label="Email" content="iwillcameron@google.com" meData={meData} handleMeData={handleMeData} isEmail={true} isField={false}/>
+      <DataSection name={'email'} label="Email" content={meData.name} meData={meData} handleMeData={handleMeData} isEmail={true} isField={false}/>
       <DataSection name={'phone'} label="Phone" content={meData.phone} meData={meData} handleMeData={handleMeData} isEmail={false} isField={true}/>
 
       <TouchableOpacity style={styles.btn} onPress={updateDate}>

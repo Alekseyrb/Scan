@@ -55,6 +55,8 @@ const HistoryScreen: React.FC<Props> = () => {
       });
       console.log(response.data.data, 'resp history');
       setHistory(response.data.data)
+      console.error(22222,response.data.data,1111);
+      
     } catch (error) {
       console.error('Error fetching users:', error);
     }

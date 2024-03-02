@@ -16,6 +16,8 @@ const Registration: React.FC<Props> = ({ navigation }) => {
   };
 
   const login = async () => {
+    console.log(email,fullName);
+    
     try {
       axios.post('https://dashboard-s2v.vrpro.com.ua/api/register/new', {
         email: email,
