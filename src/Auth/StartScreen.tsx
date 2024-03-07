@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, ImageBackground } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, ImageBackground, Image } from "react-native";
 import Logo from "../assets/Logo";
 
 interface Props {
@@ -16,32 +16,56 @@ const StartScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    // <ImageBackground source={require("../assets/BGPattern.png")} style={styles.background}>
-      <View style={styles.container}>
-        <Logo />
-        <Text style={styles.text}>We verify the authenticity of documents</Text>
-        <TouchableOpacity style={styles.btnLogin} onPress={handleLoginPress}>
-          <Text style={styles.btnText}>Sign In</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btnReg} onPress={handleRegisterPress}>
-          <Text style={styles.btnText}>Registration</Text>
-        </TouchableOpacity>
+    <>
+    
+  
+      <View style={styles.wrapper}>
+      <Image
+        style={styles.background}
+        source={require('../assets/bg.png')}
+      />
+        <View style={styles.container}>
+          <Logo />
+          <Text style={styles.text}>We verify the authenticity of documents</Text>
+          <TouchableOpacity style={styles.btnLogin} onPress={handleLoginPress}>
+            <Text style={styles.btnText}>Sign In</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btnReg} onPress={handleRegisterPress}>
+            <Text style={styles.btnText}>Registration</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    // </ImageBackground>
+  
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center"
+    position: 'absolute',
+    zIndex: 1,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '120%',
+    height: '100%',
   },
-  container: {
-    flex: 1,
+  wrapper: {
+    width: '100%',
+    height: '100%',
+    zIndex: 2,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#000',
+    backgroundColor: '#151422',
+    paddingHorizontal: 16
+  },
+  container: {
+    width: '100%',
+    height: '100%',
+    zIndex: 2,
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 16
   },
   text: {

@@ -13,9 +13,10 @@ interface Props {
   name: string;
   meData: any;
   handleMeData: any;
+  placeholder: string;
 }
 
-const DataSection: React.FC<Props> = ({label, content, isEmail, isField, meData, handleMeData, name}) => {
+const DataSection: React.FC<Props> = ({label, content, isEmail, isField, meData, handleMeData, name, placeholder}) => {
   const navigator = useNavigation();
   const [isEdit, setIsEdit] = useState(false);
   const [isChangeField, setIsChangeField] = useState(false);
@@ -33,26 +34,25 @@ const DataSection: React.FC<Props> = ({label, content, isEmail, isField, meData,
   }
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container}  onPress={() => editProfile()}>
+    {/* <View style={styles.container}> . */}
       <Text style={styles.label}>{label}:</Text>
       <View style={styles.block}>
-        {isChangeField ?
-          <TextInput
+        <TextInput
             style={styles.input}
-            placeholder="write new"
+            placeholder={placeholder}
             placeholderTextColor="#595674"
             value={content}
             onChangeText={handleData}
           />
-          :
-          <Text style={styles.content}>{content}</Text>
-        }
         {isEmail ? <></> :
-        <TouchableOpacity style={styles.edit} onPress={() => editProfile()}>
+        <View style={styles.edit}>
           <Edit />
-        </TouchableOpacity> }
+          </View>
+        }
       </View>
-    </View>
+    {/* </View> */}
+    </TouchableOpacity> 
   );
 };
 
@@ -76,13 +76,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
-    marginTop: 8
+    marginTop: 8,
+    // backgroundColor: 'red',
+    height: 32
   },
   block: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    height: 32,
   },
   edit: {
     backgroundColor: '#7920C8',
@@ -94,7 +97,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    // width: '90%',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 24,
+    padding: 0,
+    height: 32,
+    // backgroundColor: 'red'
   },
 });
 

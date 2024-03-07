@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "react-native-vision-camera";
 import WebView from "react-native-webview";
 import { useAuth } from "../../store/AuthContext";
@@ -92,7 +92,7 @@ export default function ScanScreen({ navigation }) {
   };
   const getDocument = async () => {
     console.log(scanCode);
-    
+    if (!scanCode) return;
     try {
       axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/access`,{
         headers: {
@@ -145,7 +145,7 @@ export default function ScanScreen({ navigation }) {
   };
   useEffect(()=>{
     if (scanCode){
-      getDocument()
+      // getDocument()
     }
   },[scanCode,resetScreen])
   return isLoading ? 
@@ -160,14 +160,158 @@ export default function ScanScreen({ navigation }) {
   : (
     <>
       {!openDoc ?
-        (<Camera
-          style={StyleSheet.absoluteFill}
-          device={device}
-          isActive={true}
-          codeScanner={codeScanner}
-        />) :
+        (
+          <View style={[StyleSheet.absoluteFill, {
+            backgroundColor: '#151422',
+          }]}>
+            <View style={{
+              height: '85%',
+              width: '100%',
+            }}>
+            <Camera
+              style={StyleSheet.absoluteFill}
+              device={device}
+              isActive={true}
+              codeScanner={codeScanner}
+            />
+            </View>
+            <TouchableOpacity style={styles.btn} onPress={getDocument}>
+              <Text style={styles.btnText}>Scan now</Text>
+            </TouchableOpacity>
+        </View>) :
         <WebView source={{ uri: openDoc }} style={{ flex: 1 }} />
       }
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  radioGroupContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    paddingTop: 20,
+    color: '#A64DF4',
+  },
+  radioLabel: {
+    color: '#FFFFFF',
+  },
+  customHandle: {
+
+    backgroundColor: '#151422',
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
+  },
+  contentContainer: {
+    paddingBottom: 24,
+    zIndex: 100,
+    flex: 1,
+    backgroundColor: '#151422',
+    paddingHorizontal: 16,
+  },
+  bottomSheetLabel: {
+    color: '#8A85CC',
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 28
+  },
+  bottomSheetName: {
+    paddingTop: 8,
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '600',
+    lineHeight: 32
+  },
+  bottomSheetEmail: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 24
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "#000",
+    paddingHorizontal: 16
+  },
+  drop: {
+    backgroundColor: "#2A2840",
+    width: "100%",
+    height: 56,
+    marginRight: 16,
+    borderRadius: 14,
+    marginTop: 5,
+    padding: 16,
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  labelText: {
+    color: "#fff",
+    fontWeight: "400",
+    fontSize: 12,
+    lineHeight: 20,
+    paddingTop: 24
+  },
+  dropText: {
+    color: "#fff",
+    fontWeight: "400",
+    fontSize: 16,
+    lineHeight: 24
+  },
+  switchBlock: {
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  switchBtn: {
+    width: "50%",
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderColor: "#76C0FA"
+  },
+  square: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+    backgroundColor: "#76C0FA",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  text: {
+    fontWeight: "400",
+    fontSize: 14,
+    lineHeight: 20
+  },
+  switchText: {
+    fontWeight: "400",
+    fontSize: 16,
+    lineHeight: 24,
+    color: "#76C0FA"
+  },
+  btn: {
+    backgroundColor: "#7920C8",
+    width: '100%',
+    height: 56,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 14,
+    borderColor: "#7920C8",
+    marginTop: 24,
+  },
+  btnText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600"
+  },
+});

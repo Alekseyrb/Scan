@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import ArrowRight from "../assets/ArrowRight";
+import moment from "moment";
 
 
 interface Props {
@@ -30,7 +31,7 @@ const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, id}) 
           </View>
           <View>
             <Text style={styles.label}>Data creation</Text>
-            <Text style={styles.content}>{dataCreate}</Text>
+            <Text style={styles.content}>{moment(dataCreate).format('DD-MM-YYYY')}</Text>
           </View>
         </View>
         <TouchableOpacity style={styles.btn} onPress={() => goToDoc(id)}>

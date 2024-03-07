@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { View, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, FlatList, Text, TouchableOpacity, ScrollView } from "react-native";
 import HistorySection from "../../components/HistorySection";
 import axios from "axios";
 import { useAuth } from "../../store/AuthContext";
@@ -76,16 +76,14 @@ const HistoryScreen: React.FC<Props> = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={history}
-        renderItem={({ item }) => (
-          // @ts-ignore
-          <HistorySection docNumber={item.number} requestDate={item.created_at} docName={item.name} user={item.user.name}
-                          onPressAllow={() => openBottomSheet(item.id)} id={item.id}/>
-        )}
-        // @ts-ignore
-        keyExtractor={(item) => item?.id.toString()}
-      />
+      <ScrollView>
+                {history.reverse().map(item=>(
+                   // @ts-ignore
+                  <HistorySection docNumber={item.number} requestDate={item.created_at} docName={item.name} user={item.user.name} onPressAllow={() => openBottomSheet(item.id)} id={item.id}/>
+                ))}
+              
+              </ScrollView>
+      
       {bottomSheetVisible && (
         <BottomSheet
           ref={bottomSheetRef}

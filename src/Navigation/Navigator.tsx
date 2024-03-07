@@ -23,6 +23,7 @@ import Scan from "../assets/Scan";
 import DocDetail from "../Screens/docs/DocDetail";
 import DocDetailScan from "../Screens/docs/DocDetailScan";
 import SettingScreen from "../Screens/profile/SettingScreen";
+import ChangePassword from "../Auth/ChangePassword";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -45,13 +46,7 @@ const MainTabNavigator = () => {
           } else if (route.name === "Scan") {
             return <Scan />;
           } else if (route.name === "History") {
-            return !focused ? <Image
-              source={require('../assets/bell_icon.png')}
-              style={{ width: 23, height: 25 }}
-            /> : <Image
-              source={require('../assets/bell_icon_color.png')}
-              style={{ width: 16, height: 18 }}
-            />;
+            return  focused ? <Bell color="#76C0FA" /> : <Bell color="#8A85CC" />;
           } else if (route.name === "Docs") {
             return focused ? <Doc color="#76C0FA" /> : <Doc color="#8A85CC" />;
           }
@@ -108,7 +103,7 @@ const MainTabNavigator = () => {
       />
       <Tab.Screen
         name="History"
-        component={HistoryScreen}
+        component={DocsScreen}
         options={{
           tabBarLabel: "History",
           headerTitle: "History",
@@ -116,12 +111,22 @@ const MainTabNavigator = () => {
             backgroundColor: "#000000"
           },
           headerTintColor: "#FFFFFF",
-          headerShadowVisible: false
+          headerShadowVisible: false,
         }}
+        listeners={({ navigation }) => ({
+          focus: () => {
+            navigation.setParams({ activeTab: "history" });
+          },
+        })}
       />
       <Tab.Screen
         name="Docs"
         component={DocsScreen}
+        listeners={({ navigation }) => ({
+          focus: () => {
+            navigation.setParams({ activeTab: "docs" });
+          },
+        })}
         options={{
           tabBarLabel: "Docs",
           headerTitle: "My documents",
@@ -143,6 +148,7 @@ const AppNavigator = () => {
       <Stack.Navigator>
         <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SingIn" component={SingIn} options={{ headerShown: false }} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
         <Stack.Screen name="Scan" component={ScanScreen} options={{ headerShown: false }} />
         <Stack.Screen name="VerifyEmail" component={VerifyEmail} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Registration} options={{ headerShown: false }} />

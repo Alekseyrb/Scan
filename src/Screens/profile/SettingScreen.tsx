@@ -1,6 +1,7 @@
 import React, { useCallback, useRef, useState } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { useAuth } from "../../store/AuthContext";
 
 
 interface Props {
@@ -8,13 +9,17 @@ interface Props {
 }
 
 const SettingScreen: React.FC<Props> = ({ navigation }) => {
+  const { logout } = useAuth()
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [bottomSheetVis, setBottomSheetVis] = useState(false);
   const openBottomSignOut = () => {
     setBottomSheetVis(false)
     setBottomSheetVisible(!bottomSheetVisible)
   }
-
+  const handleLogout = () => {
+    logout();
+    navigation('SingIn');
+  }
   const openBottomDelete = () => {
     setBottomSheetVisible(false)
     setBottomSheetVis(!bottomSheetVis)

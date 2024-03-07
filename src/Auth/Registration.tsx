@@ -10,30 +10,53 @@ interface Props {
 const Registration: React.FC<Props> = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [fullNameError, setFullNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
 
   const goBack = () => {
     navigation.goBack();
   };
 
-  const login = async () => {
-    console.log(email,fullName);
-    
-    try {
-      axios.post('https://dashboard-s2v.vrpro.com.ua/api/register/new', {
-        email: email,
-        name: fullName,
-      })
-        .then(({ data }) => {
-          console.log("Success:", data);
-          navigation.navigate("VerifyEmail", data);
-        })
-    } catch (e) {
-      console.error('Error: 777777', e)
+  const validateEmail = (email: any) => {
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    if (fullName.trim().length === 0) {
+      setFullNameError('Full name is required.');
+      isValid = false;
+    } else {
+      setFullNameError('');
     }
-    // navigation.navigate("VerifyEmail", {
-    //   data: {email: "hifaho8351@comsb.com", "id": 13, "name": "As aaaaaa", register_code: 399652, "role": "user", "updated_at": "2024-02-29T19:52:37.000000Z"}
-    // });
-    // navigation.navigate("VerifyEmail");
+
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address.');
+      isValid = false;
+    } else {
+      setEmailError('');
+    }
+
+    return isValid;
+  };
+
+  const register = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      const response = await axios.post('https://dashboard-s2v.vrpro.com.ua/api/register/new', {
+        name: fullName,
+        email: email,
+      });
+      console.log("Success:", response.data);
+      navigation.navigate("VerifyEmail", response.data);
+    } catch (e) {
+      console.error('Error:', e);
+      // Здесь можно добавить обработку ошибок сервера, если нужно
+    }
   };
 
   return (
@@ -44,34 +67,48 @@ const Registration: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.text}>Registration</Text>
       <Text style={styles.inputLabelText}>Full name</Text>
       <TextInput
-        style={styles.input}
-        placeholder="name"
+        style={[styles.input, fullNameError ? { borderColor: 'red', borderWidth: 1 } : {}]}
+        placeholder="Full Name"
         placeholderTextColor="#595674"
         value={fullName}
-        onChangeText={setFullName}
+        onChangeText={(text) => {
+          setFullName(text);
+          setFullNameError('');
+        }}
       />
+      {fullNameError ? <Text style={styles.errorText}>{fullNameError}</Text> : null}
       <Text style={styles.inputLabelText}>Email</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, emailError ? { borderColor: 'red', borderWidth: 1 } : {}]}
         placeholder="Email"
         placeholderTextColor="#595674"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(text) => {
+          setEmail(text);
+          setEmailError('');
+        }}
       />
+      {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
 
-
-      <TouchableOpacity style={styles.btnLogin} onPress={login}>
+      <TouchableOpacity style={styles.btnLogin} onPress={register}>
         <Text style={styles.btnText}>Register</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "#151422",
     paddingHorizontal: 16,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 4,
   },
   text: {
     color: "#fff",
@@ -103,6 +140,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: '#2A2840',
     width: '100%',
+    color: '#fff',
     height: 56,
     marginRight: 16,
     borderRadius: 14,

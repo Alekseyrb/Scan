@@ -57,9 +57,9 @@ const MyData: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <DataSection name={'name'} label="Full name" content={meData.name} meData={meData} handleMeData={handleMeData} isEmail={false} isField={true}/>
-      <DataSection name={'email'} label="Email" content={meData.name} meData={meData} handleMeData={handleMeData} isEmail={true} isField={false}/>
-      <DataSection name={'phone'} label="Phone" content={meData.phone} meData={meData} handleMeData={handleMeData} isEmail={false} isField={true}/>
+      <DataSection placeholder='firtname' name={'name'} label="Full name" content={meData.name} meData={meData} handleMeData={handleMeData} isEmail={false} isField={true}/>
+      <DataSection placeholder='lastname' name={'email'} label="Email" content={meData.email} meData={meData} handleMeData={handleMeData} isEmail={true} isField={false}/>
+      <DataSection placeholder='+44 797 577 75 77' name={'phone'} label="Phone" content={meData.phone} meData={meData} handleMeData={handleMeData} isEmail={false} isField={true}/>
 
       <TouchableOpacity style={styles.btn} onPress={updateDate}>
         <Text style={styles.btnText}>Save</Text>

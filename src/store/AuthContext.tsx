@@ -1,14 +1,16 @@
 import React, { createContext, useState, useContext } from 'react';
 
+
 // Создаем контекст
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 // Создаем компонент-поставщик, который будет содержать состояние и логику для аутентификации
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }: any) => {
+  
   const [token, setToken] = useState<any>(null);
 
   // Функция для входа в систему
-  const setLoginToken = (tokenValue) => {
+  const setLoginToken = (tokenValue: any) => {
     setToken(tokenValue);
   };
 

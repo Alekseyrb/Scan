@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import axios from "axios";
 import { useAuth } from "../store/AuthContext";
+import moment from "moment";
 
 interface Props {
   docNumber: string;
@@ -54,7 +55,7 @@ const HistorySection: React.FC<Props> = ({docNumber, requestDate, docName, user,
         <View style={styles.subBlock}>
           <View style={{marginRight: 24}}>
             <Text style={styles.label}>Create date</Text>
-            <Text style={styles.content}>{requestDate}</Text>
+            <Text style={styles.content}>{moment(requestDate).format('DD-MM-YYYY')}</Text>
           </View>
           <View>
             <Text style={styles.label}>User</Text>

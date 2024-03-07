@@ -8,18 +8,26 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import { useAuth } from "../../store/AuthContext";
 import axios from "axios";
 import WebView from "react-native-webview";
+import { useRoute } from "@react-navigation/native";
+import Dropdown from "../../components/Dropdown";
 
 interface Props {
 }
 
 const DocsScreen: React.FC<Props> = () => {
+  const route = useRoute();
   const [show, setShow] = useState(true);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const showDocs = (show: boolean) => {
     setShow(show);
     setBottomSheetVisible(false)
   };
-
+  useEffect(() => {
+    // Если параметр передан, обновляем активную вкладку
+    if (route.params && route.params?.activeTab) {
+      showDocs(route.params?.activeTab === 'docs');
+    }
+  }, [route.params]);
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   // callbacks
@@ -43,7 +51,9 @@ const DocsScreen: React.FC<Props> = () => {
   const [selectedId, setSelectedId] = useState();
   const [docs, setDocs] = useState([])
   const [docCount, setDocCount] = useState();
-
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState("All companies");
+  
   const [history, setHistory] = useState([])
   const [historyCount, setHistoryCount] = useState();
   const [idForUpt, setIdForUpt] = useState();
@@ -103,6 +113,17 @@ const getHistory = async () => {
     setBottomSheetVisible(!bottomSheetVisible)
     setIdForUpt(id)
   }
+  const companies: any = [];
+  const options = [
+    { id: 1, label: 'Option 1' },
+    { id: 2, label: 'Option 2' },
+    // Add more options as needed
+  ];
+
+  const handleSelect = (option:any) => {
+    console.log('Selected option:', option);
+    // Perform any action after selection
+  };
   // return (<WebView source={{ uri: 'http://docs.google.com/gview?embedded=true&url=https://dashboard-s2v.vrpro.com.ua/documents/ul24030269.pdf' }} style={StyleSheet.absoluteFill} />)
   return (
     <>
@@ -124,13 +145,15 @@ const getHistory = async () => {
         {show ?
           <>
             <Text style={styles.labelText}>Company creator</Text>
+            <Dropdown options={options} onSelect={handleSelect} >
             <View style={styles.drop}>
-              <Text style={styles.dropText}>All companies</Text>
-              <ArrowDown />
-            </View>
+            <Text style={styles.dropText}>{selectedCompany}</Text>
+            <ArrowDown />
+          </View></Dropdown>
+          
             <View style={{ marginTop: 8, height: '70%' }}>
               <ScrollView>
-                {docs.map(item=>(
+                {docs.reverse().map(item=>(
                    // @ts-ignore
                   <DocumentSection docNumber={item.number} dataCreate={item.created_at} docName={item.name} id={item.id}/>
                 ))}
@@ -332,6 +355,23 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "600"
+  },
+  dropdownContainer: {
+    backgroundColor: "#2A2840",
+    borderRadius: 14,
+    marginTop: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 16,
+    maxHeight: 200, // Set a max-height to prevent the dropdown from taking too much space
+    overflow: 'scroll', // Allows scrolling within the dropdown if there are many items
+  },
+  dropdownItem: {
+    paddingVertical: 10,
+  },
+  dropdownText: {
+    color: "#fff",
+    fontWeight: "400",
+    fontSize: 16,
   },
 });
 
