@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import StartScreen from "../Auth/StartScreen";
@@ -7,7 +7,7 @@ import VerifyEmail from "../Auth/VerifyEmail";
 import Registration from "../Auth/Registration";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "../Screens/profile/ProfileScreen";
-import { Image, StatusBar, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Image, StatusBar, TouchableOpacity } from "react-native";
 import MyData from "../Screens/profile/MyData";
 import ArrowLeft from "../assets/ArrowLeft";
 import ChangeEmail from "../Screens/profile/ChangeEmail";
@@ -24,6 +24,8 @@ import DocDetail from "../Screens/docs/DocDetail";
 import DocDetailScan from "../Screens/docs/DocDetailScan";
 import SettingScreen from "../Screens/profile/SettingScreen";
 import ChangePassword from "../Auth/ChangePassword";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "../store/AuthContext";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -142,10 +144,29 @@ const MainTabNavigator = () => {
 };
 
 const AppNavigator = () => {
-  return (
+  //@ts-ignore
+  const { token } = useAuth();
+  const [loading, setLoading] = useState(true);
+  const [initialRouteName, setInitialRouteName] = useState('Start'); // Default to 'Start'
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        setInitialRouteName('MainTabs');
+      } else {
+        setInitialRouteName('Start');
+      }
+    };
+
+    checkToken().finally(()=>setLoading(false));
+  }, []);
+  
+  
+  return loading ? <ActivityIndicator/> : (
     <NavigationContainer>
       <StatusBar backgroundColor="#000" />
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName={initialRouteName}>
         <Stack.Screen name="Start" component={StartScreen} options={{ headerShown: false }} />
         <Stack.Screen name="SingIn" component={SingIn} options={{ headerShown: false }} />
         <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />

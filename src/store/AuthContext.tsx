@@ -1,21 +1,34 @@
-import React, { createContext, useState, useContext } from 'react';
-
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Создаем контекст
-const AuthContext = createContext({});
+const AuthContext = createContext();
 
 // Создаем компонент-поставщик, который будет содержать состояние и логику для аутентификации
-const AuthProvider = ({ children }: any) => {
-  
+const AuthProvider = ({ children }:any) => {
   const [token, setToken] = useState<any>(null);
 
+  useEffect(() => {
+    // Асинхронная функция для получения токена из хранилища при инициализации
+    const loadToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+      }
+    };
+
+    loadToken();
+  }, []);
+
   // Функция для входа в систему
-  const setLoginToken = (tokenValue: any) => {
+  const setLoginToken = async (tokenValue:any) => {
+    await AsyncStorage.setItem('token', tokenValue);
     setToken(tokenValue);
   };
 
   // Функция для выхода из системы
-  const logout = () => {
+  const logout = async () => {
+    await AsyncStorage.removeItem('token');
     setToken(null);
   };
 
