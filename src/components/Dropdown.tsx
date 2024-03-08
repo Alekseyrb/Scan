@@ -48,9 +48,10 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect, OptionComponent 
 const styles = StyleSheet.create({
     dropdown: {
         position: 'absolute', // Set the dropdown to be positioned absolutely
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#2A2840',
         borderRadius: 5,
-        bottom: '-100%',
+        top: '100%',
+        border: '1px solid #fff',
         // marginTop: 100,
         maxHeight: 200, // Optional: change as needed
         overflow: 'hidden',
@@ -79,6 +80,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#cccccc',
   },
   optionText: {
+    color: '#fff',
     textAlign: 'center',
   },
 });

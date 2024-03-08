@@ -2,7 +2,15 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Создаем контекст
-const AuthContext = createContext();
+interface AuthContextType {
+  token: any;
+  setLoginToken: (tokenValue: any) => void;
+  logout: () => void;
+}
+
+// Создание контекста с начальным значением типа AuthContextType
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
 
 // Создаем компонент-поставщик, который будет содержать состояние и логику для аутентификации
 const AuthProvider = ({ children }:any) => {

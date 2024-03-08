@@ -146,6 +146,8 @@ const MainTabNavigator = () => {
 const AppNavigator = () => {
   //@ts-ignore
   const { token } = useAuth();
+  console.log(token);
+  
   const [loading, setLoading] = useState(true);
   const [initialRouteName, setInitialRouteName] = useState('Start'); // Default to 'Start'
 

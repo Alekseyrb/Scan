@@ -9,11 +9,11 @@ interface Props {
   docNumber: string;
   dataCreate: string;
   docName: string;
-  // companyName: string;
+  companyName: string;
   id: any;
 }
 
-const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, id}) => {
+const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, id, companyName}) => {
   const navigator = useNavigation();
 
   const goToDoc = (id:any) => {
@@ -44,10 +44,10 @@ const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, id}) 
             <Text style={styles.label}>Document name</Text>
             <Text style={styles.content}>{docName}</Text>
           </View>
-          {/*<View>*/}
-          {/*  <Text style={styles.label}>Company creator</Text>*/}
-          {/*  <Text style={styles.content}>{companyName}</Text>*/}
-          {/*</View>*/}
+          <View>
+           <Text style={styles.label}>Company creator</Text>
+           <Text style={styles.content}>{companyName}</Text>
+          </View>
         </View>
       </View>
     </View>
