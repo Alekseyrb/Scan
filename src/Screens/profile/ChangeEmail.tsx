@@ -52,7 +52,7 @@ const ChangeEmail: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingTop: 24,
     paddingHorizontal: 16
   },

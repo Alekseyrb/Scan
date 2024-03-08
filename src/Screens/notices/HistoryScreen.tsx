@@ -101,6 +101,7 @@ const HistoryScreen: React.FC<Props> = () => {
             <Text style={styles.bottomSheetName}>Kathryn Murphy</Text>
             <Text style={styles.bottomSheetEmail}>kathrinmurphyshy@gmail.com</Text>
             <RadioGroup
+             // @ts-ignore
               radioButtons={radioButtons}
               // @ts-ignore
               onPress={setSelectedId}
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingHorizontal: 16
   },
   customHandle: {

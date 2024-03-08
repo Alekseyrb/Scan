@@ -18,7 +18,7 @@ const HelpScreen: React.FC<Props> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingTop: 32,
   }
 });

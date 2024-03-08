@@ -16,7 +16,7 @@ const DocDetail: React.FC<Props> = () => {
   // @ts-ignore
   const { token } = useAuth();
 
-  const [doc, setDoc] = useState()
+  const [doc, setDoc] = useState<any>()
 
   const getDoc = async () => {
     try {
@@ -145,7 +145,7 @@ const DocDetail: React.FC<Props> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingHorizontal: 16
   },
   containerBlock: {

@@ -42,9 +42,14 @@ const DocsScreen: React.FC<Props> = () => {
   const [selectedId, setSelectedId] = useState();
   const [docs, setDocs] = useState([]);
   const [docCount, setDocCount] = useState();
-  const [selectedCompany, setSelectedCompany] = useState<any>({id: 999, label: 'All companies'});
+  const [selectedCompany, setSelectedCompany] = useState<any>({
+    id: 999,
+    label: 'All companies',
+  });
 
-  const [allCompany, setAllCompany] = useState<any[]>([{id: 999, label: 'All companies'}]);
+  const [allCompany, setAllCompany] = useState<any[]>([
+    {id: 999, label: 'All companies'},
+  ]);
 
   const [history, setHistory] = useState([]);
   const [historyCount, setHistoryCount] = useState();
@@ -73,14 +78,14 @@ const DocsScreen: React.FC<Props> = () => {
       setDocs(response.data.data);
       setDocCount(response.data.data.length);
       let companies: any = response.data.data?.map((item: any) => {
-        return  item.user.company.name;
+        return item.user.company.name;
       });
-      let uniqueCompanies = [...new Set(companies)].map((item,id)=>({
+      let uniqueCompanies = [...new Set(companies)].map((item, id) => ({
         id,
-        label: item
-      }))
+        label: item,
+      }));
       uniqueCompanies.push({id: 999, label: 'All companies'});
-      setAllCompany(uniqueCompanies)
+      setAllCompany(uniqueCompanies);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -112,8 +117,7 @@ const DocsScreen: React.FC<Props> = () => {
     setBottomSheetVisible(!bottomSheetVisible);
     setIdForUpt(id);
   };
- 
-  
+
   const options = [
     {id: 1, label: 'Option 1'},
     {id: 2, label: 'Option 2'},
@@ -179,11 +183,16 @@ const DocsScreen: React.FC<Props> = () => {
 
             <View style={{marginTop: 8, flex: 1, paddingBottom: 10}}>
               <ScrollView>
-                {docs.reverse().map((item: any) => {
+                {docs.length > 0 && docs.reverse().map((item: any, index) => {
                   // console.log(item, 'item');
-                  if (selectedCompany.label !== item?.user?.company?.name && selectedCompany.id !== 999) return;
+                  if (
+                    selectedCompany.label !== item?.user?.company?.name &&
+                    selectedCompany.id !== 999
+                  )
+                    return;
                   return (
                     <DocumentSection
+                      key={index}
                       companyName={item?.user?.company?.name}
                       docNumber={item.number}
                       dataCreate={item.created_at}
@@ -199,9 +208,10 @@ const DocsScreen: React.FC<Props> = () => {
           <View style={{marginTop: 8, flex: 1, paddingBottom: 10}}>
             <ScrollView>
               {history.length > 0 &&
-                history.reverse().map((item: any) => {
+                history.reverse().map((item: any, index) => {
                   return (
                     <HistorySection
+                      key={index}
                       docNumber={item?.document?.number}
                       requestDate={item?.created_at}
                       docName={item?.document?.name}
@@ -216,6 +226,7 @@ const DocsScreen: React.FC<Props> = () => {
         )}
       </View>
       <CustomBottomSheet
+        history={history}
         handleShowButtomSheet={handleShowButtomSheet}
         bottomSheetVisible={bottomSheetVisible}
         setSelectedId={setSelectedId}
@@ -271,7 +282,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: 'rgba(21, 20, 34, 1)',
     paddingHorizontal: 16,
   },
   drop: {

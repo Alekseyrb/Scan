@@ -5,7 +5,7 @@ import { Camera, useCameraDevice, useCameraPermission, useCodeScanner } from "re
 import WebView from "react-native-webview";
 import { useAuth } from "../../store/AuthContext";
 import { useNavigation } from "@react-navigation/native";
-
+ // @ts-ignore
 export default function ScanScreen({ navigation }) {
   //@ts-ignore
   const { token } = useAuth();
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingHorizontal: 16
   },
   drop: {

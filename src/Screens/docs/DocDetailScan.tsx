@@ -17,7 +17,7 @@ const DocDetailScan: React.FC<Props> = () => {
   // @ts-ignore
   const { token } = useAuth();
 
-  const [doc, setDoc] = useState()
+  const [doc, setDoc] = useState<any>()
   const [pageLoading, setPageLoading] = useState(true)
   const [link, setLink] = useState<boolean>(false)
 
@@ -80,6 +80,7 @@ const DocDetailScan: React.FC<Props> = () => {
           <View style={styles.subBlock}>
             <View style={{ marginRight: 21 }}>
               <Text style={styles.label}>Doc number</Text>
+              
               <Text style={styles.content}>{doc?.number}</Text>
             </View>
             <View>
@@ -124,7 +125,7 @@ const DocDetailScan: React.FC<Props> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingHorizontal: 16
   },
   containerBlock: {

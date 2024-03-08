@@ -6,49 +6,56 @@ import RadioGroup from 'react-native-radio-buttons-group';
 import ArrowDown from '../../assets/ArrowDown';
 import Dropdown from '../../components/Dropdown';
 import axios from 'axios';
-import { useAuth } from '../../store/AuthContext';
+import {useAuth} from '../../store/AuthContext';
 
 const CustomBottomSheet = ({
   bottomSheetVisible,
   setSelectedId,
   selectedId,
   idForUpt,
+  history,
   handleShowButtomSheet,
 }: any) => {
-    const options = [
-        { id: 1, label: 'Hour', value: 'hour' },
-        { id: 2, label: 'Day', value: 'day' },
-        { id: 3, label: 'week', value: 'week' },
-        { id: 4, label: 'One time', value: 'one time' },
-        { id: 5, label: 'Unlimited', value: 'unlimited' }
-      ];
+  // console.log(history.find((item: any) => item.id === idForUpt)?.from_user, 'history');
+  const currentUser = history.find(
+    (item: any) => item.id === idForUpt,
+  )?.from_user;
+  const options = [
+    {id: 1, label: 'Hour', value: 'hour'},
+    {id: 2, label: 'Day', value: 'day'},
+    {id: 3, label: 'week', value: 'week'},
+    {id: 4, label: 'One time', value: 'one time'},
+    {id: 5, label: 'Unlimited', value: 'unlimited'},
+  ];
   //@ts-ignore
   const {token} = useAuth();
-  const [timePeriod,setTimePeriod] = useState<any>(options[1]);
+  const [timePeriod, setTimePeriod] = useState<any>(options[1]);
 
   const updateAccess = async () => {
-    await axios.put(
-      `https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests/${idForUpt}`,
-      {
-        access: 1,
-        metadata_only: selectedId,
-        period_type: timePeriod.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    await axios
+      .put(
+        `https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests/${idForUpt}`,
+        {
+          access: 1,
+          metadata_only: selectedId,
+          period_type: timePeriod.value,
         },
-      },
-    ).finally(()=>{
-        handleShowButtomSheet()
-    });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      )
+      .finally(() => {
+        handleShowButtomSheet();
+      });
   };
-//   hour
-//   day
-//   week
-//   one_time
-//   unlimited
- 
+  //   hour
+  //   day
+  //   week
+  //   one_time
+  //   unlimited
+
   const radioButtons = useMemo(
     () => [
       {
@@ -72,50 +79,57 @@ const CustomBottomSheet = ({
             onPress={handleShowButtomSheet}
             style={{
               position: 'absolute',
-              top: 0,
+              top: -100,
+              // zIndex: 100,
               bottom: 0,
               left: 0,
               right: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)', // Полупрозрачный фон
-            }}></TouchableOpacity>
-          <BottomSheet
-            backgroundStyle={{
-                backgroundColor: '#151422',
+              // backgroundColor: 'rgba(21, 20, 34, 0.8)', // Полупрозрачный фон
             }}
-            snapPoints={['60%', '80%']}
-            handleComponent={() => <View style={styles.customHandle} />}>
-            <BottomSheetView style={styles.contentContainer}>
-              <Text style={styles.bottomSheetLabel}>Access for: </Text>
-              <Text style={styles.bottomSheetName}>Kathryn Murphy</Text>
-              <Text style={styles.bottomSheetEmail}>
-                kathrinmurphyshy@gmail.com
-              </Text>
-              <RadioGroup
-                //@ts-ignore
-                radioButtons={radioButtons}
-                onPress={setSelectedId}
-                selectedId={selectedId}
-                containerStyle={styles.radioGroupContainer}
-                labelStyle={styles.radioLabel}
-              />
-              <Text style={styles.labelText}>Access time period</Text>
+          />
+          {/* <View style={{zIndex: 100,flex: 1}}> */}
+            <BottomSheet
+              backgroundStyle={{
+                backgroundColor: '#151422',
+              }}
+              containerStyle={{
+                backgroundColor: 'rgba(21, 20, 34, 0.8)',
+              }}
+              snapPoints={['64%', '80%']}
+              handleComponent={() => <View style={styles.customHandle} />}>
+              <BottomSheetView style={styles.contentContainer}>
+                <Text style={styles.bottomSheetLabel}>Access for: </Text>
+                <Text style={styles.bottomSheetName}>{currentUser?.name}</Text>
+                <Text style={styles.bottomSheetEmail}>
+                  {currentUser?.email}
+                </Text>
+                <RadioGroup
+                  //@ts-ignore
+                  radioButtons={radioButtons}
+                  onPress={setSelectedId}
+                  selectedId={selectedId}
+                  containerStyle={styles.radioGroupContainer}
+                  labelStyle={styles.radioLabel}
+                />
+                <Text style={styles.labelText}>Access time period</Text>
 
-              <Dropdown options={options} onSelect={(option) => {
-               setTimePeriod(option);
-              }}>
-                <View style={styles.drop}>
-                  <Text style={styles.dropText}>{timePeriod.label}</Text>
-                  <ArrowDown />
-                </View>
-              </Dropdown>
+                <Dropdown
+                  options={options}
+                  onSelect={option => {
+                    setTimePeriod(option);
+                  }}>
+                  <View style={styles.drop}>
+                    <Text style={styles.dropText}>{timePeriod.label}</Text>
+                    <ArrowDown />
+                  </View>
+                </Dropdown>
 
-              <TouchableOpacity
-                style={styles.btn}
-                onPress={updateAccess}>
-                <Text style={styles.btnText}>Confirm</Text>
-              </TouchableOpacity>
-            </BottomSheetView>
-          </BottomSheet>
+                <TouchableOpacity style={styles.btn} onPress={updateAccess}>
+                  <Text style={styles.btnText}>Confirm</Text>
+                </TouchableOpacity>
+              </BottomSheetView>
+            </BottomSheet>
+          {/* </View> */}
         </>
       )}
     </>
@@ -133,15 +147,29 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   customHandle: {
-    // backgroundColor: '#151422',
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderTopLeftRadius: 14,
-    borderTopRightRadius: 14,
+    borderRadius: 2.5,
+    // position: 'absolute',
+    marginTop: -16,
+    height: 5, // Высота линии
+    width: 80, // Ширина линии
+    backgroundColor: 'rgba(138, 133, 204, 0.5)', // Прозрачный фон
+    borderTopWidth: 5, // Толщина линии
+    borderTopColor: '#FFFFFF', // Цвет линии
+    alignSelf: 'center', // Центрирование линии
   },
   contentContainer: {
+    paddingTop: 14,
+    marginBottom: -20,
+    borderWidth: 1,
+    width: '101%',
+    marginLeft: -2,
+    // borderTopLeftWidth: 1,
+    // borderTopRightWidth: 1,
+    borderColor: 'rergba(138, 133, 204, 0.5)d',
+    borderTopLeftRadius: 14,
+    borderTopRightRadius: 14,
     paddingBottom: 24,
-    zIndex: 100,
+    zIndex: 333,
     flex: 1,
     backgroundColor: '#151422',
     paddingHorizontal: 16,

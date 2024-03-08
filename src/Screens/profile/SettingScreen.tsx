@@ -9,6 +9,7 @@ interface Props {
 }
 
 const SettingScreen: React.FC<Props> = ({ navigation }) => {
+   // @ts-ignore
   const { logout } = useAuth()
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [bottomSheetVis, setBottomSheetVis] = useState(false);
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(21, 20, 34, 1)",
     paddingHorizontal: 16,
   },
   btn: {

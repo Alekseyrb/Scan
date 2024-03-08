@@ -47,19 +47,19 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect, OptionComponent 
 
 const styles = StyleSheet.create({
     dropdown: {
-        position: 'absolute', // Set the dropdown to be positioned absolutely
+        position: 'absolute',
         backgroundColor: '#2A2840',
-        borderRadius: 5,
+        borderRadius: 12,
+        borderWidth: 1,
         top: '100%',
-        border: '1px solid #fff',
-        // marginTop: 100,
-        maxHeight: 200, // Optional: change as needed
+        maxHeight: 200,
         overflow: 'hidden',
-        width: '100%', // Ensure the dropdown matches the width of the toggle button
-        zIndex: 1000, // Make sure the dropdown appears on top of other content
+        borderColor: '#cccccc',
+        width: '100%',
+        zIndex: 1000, 
       },
       container: {
-        position: 'relative', // Ensure the parent container is positioned
+        position: 'relative', 
         width: '100%', // Set a width for the container
       },
   button: {
@@ -75,8 +75,10 @@ const styles = StyleSheet.create({
   },
   
   option: {
+
+    border: '2px solid red',
     padding: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.19,
     borderBottomColor: '#cccccc',
   },
   optionText: {
