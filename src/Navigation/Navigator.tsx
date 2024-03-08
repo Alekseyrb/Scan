@@ -266,6 +266,7 @@ const AppNavigator = () => {
               backgroundColor: 'rgba(21, 20, 34, 1)',
             },
             headerTintColor: '#FFFFFF',
+            headerTitleAlign: 'center',
             headerShadowVisible: false,
           })}
         />
@@ -278,6 +279,7 @@ const AppNavigator = () => {
             headerStyle: {
               backgroundColor: 'rgba(21, 20, 34, 1)',
             },
+            headerTitleAlign: 'center',
             headerTintColor: '#FFFFFF',
             headerShadowVisible: false,
           })}
@@ -286,6 +288,7 @@ const AppNavigator = () => {
           name="DocDetail"
           component={DocDetail}
           options={({navigation}) => ({
+            headerTitleAlign: 'center',
             headerTitle: 'My document',
             headerLeft: () => <CustomHeaderLeft navigation={navigation} />,
             headerStyle: {
@@ -304,6 +307,7 @@ const AppNavigator = () => {
             headerStyle: {
               backgroundColor: 'rgba(21, 20, 34, 1)',
             },
+            headerTitleAlign: 'center',
             headerTintColor: '#FFFFFF',
             headerShadowVisible: false,
           })}
@@ -312,6 +316,7 @@ const AppNavigator = () => {
           name="Settings"
           component={SettingScreen}
           options={({navigation}) => ({
+            headerTitleAlign: 'center',
             headerTitle: 'Settings',
             headerLeft: () => <CustomHeaderLeft navigation={navigation} />,
             headerStyle: {
