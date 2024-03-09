@@ -37,22 +37,6 @@ const DocDetailScan: React.FC<Props> = () => {
 
   const getView = async () => {
     setLink(true)
-    // try {
-    //   // console.error(111111);
-      
-    //   const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/download`, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`
-    //     }
-    //   });
-    //   // console.log(response.data,'response');
-      
-      // Linking.openURL(doc?.file_url);
-    //   // console.log(response.data.data, 'resp');
-      
-    // } catch (error) {
-    //   console.error('Error fetching users:', error);
-    // }
   };
   function hideSpinner() {
     setPageLoading(false)
@@ -98,6 +82,22 @@ const DocDetailScan: React.FC<Props> = () => {
           </View>
         </View>
       </View>
+      {doc?.fields?.map((item:any)=>(
+        <View style={styles.fieldBlock}>
+        <View style={styles.block}>
+          <View style={styles.fieldSubBlock}>
+            <View style={{ marginRight: 21 }}>
+              <Text style={styles.label}>Name</Text>
+              <Text style={styles.content}>{item?.name}</Text>
+            </View>
+            <View>
+              <Text style={styles.label}>Value</Text>
+              <Text style={styles.content}>{item?.value}</Text>
+            </View>
+          </View>
+        </View>
+        </View>
+      ))}
       <View style={styles.btnBlock}>
       {!metadata_only && <TouchableOpacity style={styles.btn} onPress={getView}>
               <Text style={styles.btnText}>View</Text>
@@ -112,10 +112,12 @@ const DocDetailScan: React.FC<Props> = () => {
         source={{ uri: `http://docs.google.com/gview?embedded=true&url=${doc?.file_url}` }}
       />
       {pageLoading && (
+        <View style={[StyleSheet.absoluteFill, {display: 'flex',justifyContent: 'center', alignItems: 'center'}]}>
         <ActivityIndicator
-          style={{ position: "absolute", top: '50%',  }}
+          // style={{ position: "absolute", top: '50%',  }}
           size="large"
         />
+        </View>
       )}
     </View>
     // <WebVie .w source={{ uri: `http://docs.google.com/gview?embedded=true&url=${doc?.file_url}` }} style={StyleSheet.absoluteFill} />
@@ -123,6 +125,21 @@ const DocDetailScan: React.FC<Props> = () => {
 };
 
 const styles = StyleSheet.create({
+  fieldBlock: {
+    backgroundColor: "#2A2840",
+    borderRadius: 14,
+    borderWidth: 1,
+    height: 80,
+    width: "100%",
+    marginTop: 8,
+    padding: 16
+  },
+  fieldSubBlock: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "row"
+  },
   container: {
     flex: 1,
     backgroundColor: "rgba(21, 20, 34, 1)",
@@ -174,7 +191,7 @@ const styles = StyleSheet.create({
     width: "48%"
   },
   btnText: {
-    color: "#A64DF4",
+    color: "#fff",
     fontSize: 16,
     fontWeight: "600"
   },

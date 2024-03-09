@@ -18,7 +18,7 @@ const DocumentSection: React.FC<Props> = ({docNumber, dataCreate, docName, id, c
 
   const goToDoc = (id:any) => {
     // @ts-ignore
-    return navigator.navigate('DocDetail', { id });
+    return navigator.navigate('DocDetail', { id:docNumber });
   }
 
   return (

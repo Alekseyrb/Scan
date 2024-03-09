@@ -4,6 +4,7 @@ import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
 import {useAuth} from '../../store/AuthContext';
 import UniversalBottomSheet from '../../components/UniversalBottomSheet';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 interface Props {
   navigation: any;
@@ -11,7 +12,7 @@ interface Props {
 
 const SettingScreen: React.FC<Props> = () => {
   // @ts-ignore
-  const {logout} = useAuth();
+  const {logout, token} = useAuth();
   const navigation = useNavigation();
   const [signOutVisible, setSignOutVisible] = useState(false);
   const [deleteVisible, setDeleteVisible] = useState(false);
@@ -19,6 +20,32 @@ const SettingScreen: React.FC<Props> = () => {
     setDeleteVisible(false);
     setSignOutVisible(prev => !prev);
   };
+  const handleDelete = async () => {
+    try {
+      await axios
+        .delete(
+          'https://dashboard-s2v.vrpro.com.ua/api/app/users/me',
+
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+          
+        )
+        .then(({data}) => {
+          setTimeout(() => {
+            navigation.goBack();
+          }, 1000);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+      
+        });
+    } catch (e) {
+      console.error('Change Password Error:', e);
+    }
+  }
   const handleLogout = () => {
     logout();
     //@ts-ignore
@@ -82,6 +109,7 @@ const SettingScreen: React.FC<Props> = () => {
               <Text style={{...styles.btnText, color: '#8ACCFF'}}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={handleDelete}
               style={{...styles.btnSmall, borderColor: '#F44D4D'}}>
               <Text style={{...styles.btnText, color: '#F44D4D'}}>Delete</Text>
             </TouchableOpacity>

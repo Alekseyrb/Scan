@@ -19,8 +19,10 @@ const DocDetail: React.FC<Props> = () => {
   const [doc, setDoc] = useState<any>()
 
   const getDoc = async () => {
+    console.log(id, 'id');
+    
     try {
-      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${id}`, {
+      const response = await axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/number/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -35,7 +37,8 @@ const DocDetail: React.FC<Props> = () => {
   useEffect(() => {
     getDoc()
   },[])
-
+  console.log(doc, '\n\n\ndoc');
+  
   const onShare = async (url:any) => {
     try {
       const result = await Share.share({
@@ -83,6 +86,22 @@ const DocDetail: React.FC<Props> = () => {
           </View>
         </View>
       </View>
+      {doc?.fields?.map((item:any)=>(
+        <View style={styles.fieldBlock}>
+        <View style={styles.block}>
+          <View style={styles.fieldSubBlock}>
+            <View style={{ marginRight: 21 }}>
+              <Text style={styles.label}>Name</Text>
+              <Text style={styles.content}>{item?.name}</Text>
+            </View>
+            <View>
+              <Text style={styles.label}>Value</Text>
+              <Text style={styles.content}>{item?.value}</Text>
+            </View>
+          </View>
+        </View>
+        </View>
+      ))}
       {/*<View style={styles.subContainerBlock}>*/}
       {/*  <View style={styles.block}>*/}
       {/*    <View style={styles.subBlock}>*/}
@@ -157,6 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     padding: 16
   },
+  
   subContainerBlock: {
     backgroundColor: "#2A2840",
     borderRadius: 14,
@@ -187,6 +207,21 @@ const styles = StyleSheet.create({
   subBlock: {
     display: "flex",
     justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row"
+  },
+  fieldBlock: {
+    backgroundColor: "#2A2840",
+    borderRadius: 14,
+    borderWidth: 1,
+    height: 80,
+    width: "100%",
+    marginTop: 8,
+    padding: 16
+  },
+  fieldSubBlock: {
+    display: "flex",
+    justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row"
   },

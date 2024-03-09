@@ -24,7 +24,7 @@ const CustomBottomSheet = ({
     {id: 1, label: 'Hour', value: 'hour'},
     {id: 2, label: 'Day', value: 'day'},
     {id: 3, label: 'week', value: 'week'},
-    {id: 4, label: 'One time', value: 'one time'},
+    {id: 4, label: 'One time', value: 'one_time'},
     {id: 5, label: 'Unlimited', value: 'unlimited'},
   ];
   //@ts-ignore
@@ -32,6 +32,12 @@ const CustomBottomSheet = ({
   const [timePeriod, setTimePeriod] = useState<any>(options[1]);
 
   const updateAccess = async () => {
+    console.log({
+      access: 1,
+      metadata_only: selectedId,
+      period_type: timePeriod.value,
+    },);
+    
     await axios
       .put(
         `https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests/${idForUpt}`,
@@ -59,12 +65,12 @@ const CustomBottomSheet = ({
   const radioButtons = useMemo(
     () => [
       {
-        id: 0,
+        id: 1,
         label: 'Metadata only',
         value: 'option1',
       },
       {
-        id: 1,
+        id: 0,
         label: 'Metadata and document',
         value: 'option2',
       },

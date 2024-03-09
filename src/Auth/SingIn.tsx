@@ -1,28 +1,37 @@
-import React, { useContext, useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, TextInput } from "react-native";
-import ArrowLeft from "../assets/ArrowLeft";
-import axios from "axios";
-import { useAuth } from "../store/AuthContext";
+import React, {useContext, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import ArrowLeft from '../assets/ArrowLeft';
+import axios from 'axios';
+import {useAuth} from '../store/AuthContext';
+import EyeIcon from '../assets/EyeIcon';
+import EyeOffIcon from '../assets/EyeOffIcon';
 
 interface Props {
   navigation: any;
 }
 
-const SignIn: React.FC<Props> = ({ navigation }) => {
-  const [email, setEmail] = useState('kotejov268@aersm.com');
-  const [password, setPassword] = useState('aaaaaaaaa');
+const SignIn: React.FC<Props> = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [serverError, setServerError] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
   // @ts-ignore
-  const { setLoginToken } = useAuth();
+  const {setLoginToken} = useAuth();
 
   const goBack = () => {
     navigation.goBack();
   };
   const resetPassword = () => {
     navigation.navigate('ChangePassword');
-  }
+  };
 
   const validateEmail = (email: string) => {
     const re = /\S+@\S+\.\S+/;
@@ -56,15 +65,18 @@ const SignIn: React.FC<Props> = ({ navigation }) => {
     }
 
     try {
-      await axios.post('https://dashboard-s2v.vrpro.com.ua/api/login', {
-        email: email,
-        password: password,
-      }).then(({ data }) => {
-          console.log("Success:", data);
+      await axios
+        .post('https://dashboard-s2v.vrpro.com.ua/api/login', {
+          email: email,
+          password: password,
+        })
+        .then(({data}) => {
+          console.log('Success:', data);
           setLoginToken(data.access_token);
           // AsyncStorage.setItem('token', data.access_token);
-          navigation.navigate("MainTabs");
-        }).catch((error) => {
+          navigation.navigate('MainTabs');
+        })
+        .catch(error => {
           // Handling errors like 401, 403, 500, etc.
           if (error.response) {
             // The request was made and the server responded with a status code
@@ -94,37 +106,56 @@ const SignIn: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.text}>Sign In</Text>
       <Text style={styles.inputLabelText}>Email</Text>
       <TextInput
-        style={[styles.input, emailError ? { borderColor: 'red', borderWidth: 1 } : {}]}
+        style={[
+          styles.input,
+          emailError ? {borderColor: 'red', borderWidth: 1} : {},
+        ]}
         placeholder="simpleemail@simple.domain"
         placeholderTextColor="#595674"
         value={email}
-        onChangeText={(text) => {
+        onChangeText={text => {
           setEmail(text);
           setEmailError('');
         }}
       />
       {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
       <Text style={styles.inputLabelText}>Password</Text>
-      <TextInput
-        style={[styles.input, passwordError ? { borderColor: 'red', borderWidth: 1 } : {}]}
-        placeholder="Password"
-        placeholderTextColor="#595674"
-        value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-          setPasswordError('');
-        }}
-        secureTextEntry
-      />
-      {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+      <View>
+        <TextInput
+          style={[
+            styles.input,
+            passwordError ? {borderColor: 'red', borderWidth: 1} : {},
+          ]}
+          placeholder="Password"
+          placeholderTextColor="#595674"
+          value={password}
+          onChangeText={text => {
+            setPassword(text);
+            setPasswordError('');
+          }}
+          secureTextEntry={!passwordVisible}
+        />
+        <TouchableOpacity style={{
+          position: 'absolute',
+          right: 12,
+          top: 22,
+        }} onPress={() => setPasswordVisible(!passwordVisible)}>
+          {passwordVisible ? <EyeIcon /> : <EyeOffIcon />}
+        </TouchableOpacity>
+      </View>
+
+      {passwordError ? (
+        <Text style={styles.errorText}>{passwordError}</Text>
+      ) : null}
       <TouchableOpacity style={styles.btnLogin} onPress={login}>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
-      {serverError ? <Text style={styles.serverErrorText}>{serverError}</Text> : null}
-      <TouchableOpacity onPress={resetPassword}>
-      <Text style={styles.textForgot}>Forgot password?</Text>
+      {serverError ? (
+        <Text style={styles.serverErrorText}>{serverError}</Text>
+      ) : null}
+      <TouchableOpacity onPress={()=>{}}>
+        <Text style={styles.textForgot}>Forgot password?</Text>
       </TouchableOpacity>
-     
     </View>
   );
 };
@@ -132,32 +163,32 @@ const SignIn: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#151422",
+    backgroundColor: '#151422',
     paddingHorizontal: 16,
   },
   text: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 34,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 42,
-    paddingTop: 36
+    paddingTop: 36,
   },
   btnLogin: {
-    backgroundColor: "#7920C8",
+    backgroundColor: '#7920C8',
     width: '100%',
     height: 56,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 1,
     borderRadius: 14,
-    borderColor: "#7920C8",
+    borderColor: '#7920C8',
     marginTop: 24,
   },
   btnText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   btnGoBack: {
     paddingTop: 60,
@@ -182,7 +213,7 @@ const styles = StyleSheet.create({
   textForgot: {
     color: '#A64DF4',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 28,
     textAlign: 'center',
     marginTop: 38,
@@ -202,6 +233,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 
 export default SignIn;

@@ -63,7 +63,7 @@ const MainTabNavigator = () => {
             } else if (route.name === 'MyProfile') {
               iconComponent = <BottomProfile color={iconColor} />;
             } else if (route.name === 'Scan') {
-               // @ts-ignore
+              // @ts-ignore
               iconComponent = <Scan color={iconColor} />;
             } else if (route.name === 'History') {
               iconComponent = <Bell color={iconColor} />;
@@ -234,7 +234,16 @@ const AppNavigator = () => {
         <Stack.Screen
           name="ChangePassword"
           component={ChangePassword}
-          options={{headerShown: false}}
+          options={({navigation}) => ({
+            headerTitle: 'Change password',
+            headerLeft: () => <CustomHeaderLeft navigation={navigation} />,
+            headerStyle: {
+              backgroundColor: 'rgba(21, 20, 34, 1)',
+            },
+            headerTintColor: '#FFFFFF',
+            headerTitleAlign: 'center',
+            headerShadowVisible: false,
+          })}
         />
         <Stack.Screen
           name="Scan"

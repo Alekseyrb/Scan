@@ -30,12 +30,13 @@ export default function ScanScreen({ navigation }) {
   const codeScanner = useCodeScanner({
     codeTypes: ["qr", "ean-13"],
     onCodeScanned: (codes: any) => {
-      console.log(34);
       setResetScreen(prev=>!prev)
       setScanCode(codes[0].value);
     }
   });
   const getRequstPermision = async () => {
+    console.log(scanCode, 'scanCode');
+    
     try {
       axios.post(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/requests`,{
         document_id: scanCode
@@ -92,6 +93,7 @@ export default function ScanScreen({ navigation }) {
   };
   const getDocument = async () => {
     console.log(scanCode);
+    // return null;
     if (!scanCode) return;
     try {
       axios.get(`https://dashboard-s2v.vrpro.com.ua/api/app/documents/${scanCode}/access`,{

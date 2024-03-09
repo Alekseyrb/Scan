@@ -16,7 +16,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
       <ProfileSection text="My data" route="MyData">
         <Profile/>
       </ProfileSection>
-      <ProfileSection text="Change password" route="MyData">
+      <ProfileSection text="Change password" route="ChangePassword">
         <Key/>
       </ProfileSection>
       <ProfileSection text="Settings" route="Settings">
